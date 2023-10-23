@@ -13,9 +13,9 @@
  */
 void LED_Init(void) {
     /*
-        LED-B	PE9
-        LED-G	PE8
         LED-R	PE7
+        LED-G	PE8
+        LED-B	PE9
     */
     GPIO_InitTypeDef GPIO_InitStruct;
 
