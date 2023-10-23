@@ -250,18 +250,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
              the HAL_UART_TxCpltCallback could be implemented in the user file
      */
 
-    if (Uart1_Rx_Cnt >= 255)  //溢出判断
+    if (Uart1_Rx_Cnt >= 255) // 溢出判断
     {
         Uart1_Rx_Cnt = 0;
         memset(RxBuffer, 0x00, sizeof(RxBuffer));
         HAL_UART_Transmit(&huart1, (uint8_t *) "数据溢出", 10, 0xFFFF);
     } else {
-        RxBuffer[Uart1_Rx_Cnt++] = aRxBuffer;   //接收数据转存
+        RxBuffer[Uart1_Rx_Cnt++] = aRxBuffer; // 接收数据转存
 
-        if ((RxBuffer[Uart1_Rx_Cnt - 1] == 0x0A) && (RxBuffer[Uart1_Rx_Cnt - 2] == 0x0D)) //判断结束位
+        if ((RxBuffer[Uart1_Rx_Cnt - 1] == 0x0A) && (RxBuffer[Uart1_Rx_Cnt - 2] == 0x0D)) // 判断结束位
         {
             printf("您输入的数据是：");
-            HAL_UART_Transmit(&huart1, (uint8_t *) &RxBuffer, Uart1_Rx_Cnt, 0xFFFF); //将收到的信息发送出去
+            HAL_UART_Transmit(&huart1, (uint8_t *) &RxBuffer, Uart1_Rx_Cnt, 0xFFFF); // 将收到的信息发送出去
             while (HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);//检测UART发送结束
 //            if (strstr(RxBuffer, "LED=0")) {
 //                HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET); // 红灯亮
@@ -270,8 +270,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 //                HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // 红灯灭
 //                printf("LED灭\r\n");
 //            }
-            printf("\r\n"); // 插入换行
-            Uart1_Rx_Cnt = 0;
+//            printf("\r\n"); // 插入换行
+            Uart1_Rx_Cnt = 0; // 清空计数
             memset(RxBuffer, 0x00, sizeof(RxBuffer)); //清空数组
         }
     }

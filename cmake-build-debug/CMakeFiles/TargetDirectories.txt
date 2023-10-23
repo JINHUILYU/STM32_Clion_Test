@@ -1,3 +1,0 @@
-E:/Project/ATK_L496/Test/Test/cmake-build-debug/CMakeFiles/Test.elf.dir
-E:/Project/ATK_L496/Test/Test/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/Project/ATK_L496/Test/Test/cmake-build-debug/CMakeFiles/rebuild_cache.dir
