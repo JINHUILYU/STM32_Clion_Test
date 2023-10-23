@@ -29,6 +29,7 @@
 #include "stdio.h"
 #include "retarget.h"
 #include <string.h>
+#include "exti.h"
 
 #define RXBUFFERSIZE  256 // 最大接收字节数
 char RxBuffer[RXBUFFERSIZE]; // 接收缓冲区
@@ -104,6 +105,7 @@ int main(void) {
     BEEP_Init(); // 初始化蜂鸣器
     KEY_Init(); // 初始化按键
     RetargetInit(&huart1); // 初始化重定向
+    EXTI_Init(); // 初始化外部中断
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -194,7 +196,10 @@ int main(void) {
 #endif
 
 #ifdef Exp5
-        printf("Hello, world!\r\n"); // 回车换行
+        /**
+         * 实验五：外部中断
+         */
+        printf("OK!\r\n"); // 回车换行
         HAL_Delay(1000); // 延时10ms
 #endif
 
@@ -243,6 +248,7 @@ void SystemClock_Config(void) {
 }
 
 /* USER CODE BEGIN 4 */
+// 串口接收中断回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     /* Prevent unused argument(s) compilation warning */
     UNUSED(huart);
