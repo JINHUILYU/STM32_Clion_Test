@@ -82,7 +82,8 @@ typedef __I uint8_t vuc8;
 //#define Exp2
 //#define Exp3
 //#define Exp4
-#define Exp5
+//#define Exp5
+#define Exp6
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/

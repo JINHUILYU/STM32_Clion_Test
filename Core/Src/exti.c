@@ -13,6 +13,7 @@
  *
  * @return  void
  */
+// 初始化内容与MX_GPIO_Init()中的部分内容相同
 void EXTI_Init(void) {
     /*
         KEY0 	- PD10
@@ -71,31 +72,32 @@ void EXTI15_10_IRQHandler(void);
  *
  * @return  void
  */
+// 外部中断回调函数
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    HAL_Delay(50); // 消抖
-    switch (GPIO_Pin) {
-        case GPIO_PIN_13: // 控制蜂鸣器状态翻转
-            if (WK_UP == 1) // 按键按下，蜂鸣器高电平有效
-                BEEP_TogglePin;
-            break;
-
-        case GPIO_PIN_8: // 控制LED_B灯状态翻转
-            if (KEY2 == 0) // 按键按下，LED_B低电平有效
-                LED_B_TogglePin;
-            break;
-
-        case GPIO_PIN_9: // 控制LED_G灯状态翻转
-            if (KEY1 == 0) // 按键按下，LED_G低电平有效
-                LED_G_TogglePin;
-            break;
-
-        case GPIO_PIN_10: // 控制LED_R灯状态翻转
-            if (KEY0 == 0) // 按键按下，LED_R低电平有效
-                LED_R_TogglePin;
-            break;
-        default:
-            break;
-    }
+//    HAL_Delay(50); // 消抖
+//    switch (GPIO_Pin) {
+//        case GPIO_PIN_13: // 控制蜂鸣器状态翻转
+//            if (WK_UP == 1) // 按键按下，蜂鸣器高电平有效
+//                BEEP_TogglePin;
+//            break;
+//
+//        case GPIO_PIN_8: // 控制LED_B灯状态翻转
+//            if (KEY2 == 0) // 按键按下，LED_B低电平有效
+//                LED_B_TogglePin;
+//            break;
+//
+//        case GPIO_PIN_9: // 控制LED_G灯状态翻转
+//            if (KEY1 == 0) // 按键按下，LED_G低电平有效
+//                LED_G_TogglePin;
+//            break;
+//
+//        case GPIO_PIN_10: // 控制LED_R灯状态翻转
+//            if (KEY0 == 0) // 按键按下，LED_R低电平有效
+//                LED_R_TogglePin;
+//            break;
+//        default:
+//            break;
+//    }
 }
 
 

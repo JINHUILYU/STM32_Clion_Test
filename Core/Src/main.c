@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "iwdg.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -79,6 +80,9 @@ int main(void) {
     u8 key;
     u8 len;
     u16 times = 0;
+    // SystemClock_Config()卡死，加入下面两行代码解决
+    __HAL_RCC_HSI_ENABLE();
+    __HAL_RCC_SYSCLK_CONFIG(RCC_SYSCLKSOURCE_HSI);
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -94,18 +98,20 @@ int main(void) {
     SystemClock_Config();
 
     /* USER CODE BEGIN SysInit */
-
+    HAL_Delay(100); // 延时100ms再初始化看门狗
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_IWDG_Init();
     /* USER CODE BEGIN 2 */
     LED_Init(); // 初始化LED
     BEEP_Init(); // 初始化蜂鸣器
     KEY_Init(); // 初始化按键
     RetargetInit(&huart1); // 初始化重定向
-    EXTI_Init(); // 初始化外部中断
+    EXTI_Init(); // 初始化外部中断，初始化内容与MX_GPIO_Init()中的相关内容相同
+    LED_B(0);
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -203,6 +209,15 @@ int main(void) {
         HAL_Delay(1000); // 延时10ms
 #endif
 
+#ifdef Exp6
+        /**
+         * 实验六：独立看门狗
+         */
+        if (KEY_Scan(0) == WKUP_PRES) // 如果WK_UP按下，喂狗
+        {
+            HAL_IWDG_Refresh(&hiwdg); // 喂狗
+        }
+#endif
     }
     /* USER CODE END 3 */
 }
@@ -224,10 +239,10 @@ void SystemClock_Config(void) {
     /** Initializes the RCC Oscillators according to the specified parameters
     * in the RCC_OscInitTypeDef structure.
     */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
-    RCC_OscInitStruct.MSIState = RCC_MSI_ON;
-    RCC_OscInitStruct.MSICalibrationValue = 0;
-    RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_6;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
+    RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+    RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+    RCC_OscInitStruct.LSIState = RCC_LSI_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
         Error_Handler();
@@ -237,7 +252,7 @@ void SystemClock_Config(void) {
     */
     RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
                                   | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
     RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
     RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
