@@ -20,19 +20,19 @@ void KEY_Init(void) {
 
     GPIO_InitTypeDef GPIO_Initure;
 
-    __HAL_RCC_GPIOC_CLK_ENABLE();           //开启GPIOC时钟
-    __HAL_RCC_GPIOD_CLK_ENABLE();           //开启GPIOD时钟
-
-    GPIO_Initure.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10;    //PD8.9.10
-    GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
-    GPIO_Initure.Pull = GPIO_PULLDOWN;      //下拉
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
+    __HAL_RCC_GPIOC_CLK_ENABLE(); // 开启GPIOC时钟
+    __HAL_RCC_GPIOD_CLK_ENABLE(); // 开启GPIOD时钟
+    // KEY0-2 低电平有效
+    GPIO_Initure.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10; // PD8.9.10
+    GPIO_Initure.Mode = GPIO_MODE_INPUT; // 输入
+    GPIO_Initure.Pull = GPIO_PULLUP; // 上拉
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH; // 高速
     HAL_GPIO_Init(GPIOD, &GPIO_Initure);
-
-    GPIO_Initure.Pin = GPIO_PIN_13;         //PC13
-    GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
-    GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
+    // WK_UP 高电平有效
+    GPIO_Initure.Pin = GPIO_PIN_13; // PC13
+    GPIO_Initure.Mode = GPIO_MODE_INPUT; // 输入
+    GPIO_Initure.Pull = GPIO_PULLDOWN; // 下拉
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH; // 高速
     HAL_GPIO_Init(GPIOC, &GPIO_Initure);
 }
 
@@ -48,12 +48,13 @@ void KEY_Init(void) {
 *					0:没有任何按键按下,1:KEY0按下,2:KEY1按下,3:KEY2按下,4:WK_UP按下
  */
 u8 KEY_Scan(u8 mode) {
-    static u8 key_up = 1;   //按键松开标志
+    static u8 key_up = 1; // 按键松开标志
 
-    if (mode == 1)key_up = 1; //支持连按
+    if (mode == 1)
+        key_up = 1; // 支持连按
 
     if (key_up && (KEY0 == 0 || KEY1 == 0 || KEY2 == 0 || WK_UP == 1)) {
-        HAL_Delay(10);
+        HAL_Delay(10); // 去抖动
         key_up = 0;
 
         if (KEY0 == 0) return KEY0_PRES;

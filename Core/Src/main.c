@@ -20,6 +20,7 @@
 #include "main.h"
 #include "iwdg.h"
 #include "usart.h"
+#include "wwdg.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -98,25 +99,27 @@ int main(void) {
     SystemClock_Config();
 
     /* USER CODE BEGIN SysInit */
-    HAL_Delay(100); // 延时100ms再初始化看门狗
+//    HAL_Delay(100); // 延时100ms再初始化看门狗
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_USART1_UART_Init();
-    MX_IWDG_Init();
+//    MX_USART1_UART_Init();
+//  MX_IWDG_Init();
+//    MX_WWDG_Init();
     /* USER CODE BEGIN 2 */
-    LED_Init(); // 初始化LED
-    BEEP_Init(); // 初始化蜂鸣器
-    KEY_Init(); // 初始化按键
-    RetargetInit(&huart1); // 初始化重定向
-    EXTI_Init(); // 初始化外部中断，初始化内容与MX_GPIO_Init()中的相关内容相同
-    LED_B(0);
+    LED_Init(); // 初始化LED，初始化内容与MX_GPIO_Init()中的相关内容相同
+    KEY_Init(); // 初始化按键，初始化内容与MX_GPIO_Init()中的相关内容相同
+//    BEEP_Init(); // 初始化蜂鸣器，初始化内容与MX_GPIO_Init()中的相关内容相同
+//    EXTI_Init(); // 初始化外部中断，初始化内容与MX_GPIO_Init()中的相关内容相同
+//    RetargetInit(&huart1); // 初始化重定向
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    HAL_UART_Receive_IT(&huart1, (uint8_t *) &aRxBuffer, 1); // 接收中断
+//    HAL_UART_Receive_IT(&huart1, (uint8_t *) &aRxBuffer, 1); // 接收中断
+    // 初始时，LED_R灯亮，LED_G灯灭，LED_B灯灭
+    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET); // PE7置0，红灯亮
     while (1) {
         /* USER CODE END WHILE */
 
@@ -125,24 +128,55 @@ int main(void) {
         /**
          * 实验一：LED闪烁
          */
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // PE7置1，红灯灭
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); // PE8置1，绿灯灭
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET); // PE9置1，蓝灯灭
-        HAL_Delay(1000); // 延时1000ms
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET); // PE7置0，红灯亮
-        HAL_Delay(1000); // 延时1000ms
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // PE7置1，红灯灭
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); // PE8置1，绿灯灭
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET); // PE9置1，蓝灯灭
-        HAL_Delay(1000); // 延时1000ms
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET); // PE8置0，绿灯亮
-        HAL_Delay(1000); // 延时1000ms
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // PE7置1，红灯灭
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); // PE8置1，绿灯灭
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET); // PE9置1，蓝灯灭
-        HAL_Delay(1000); // 延时1000ms
-        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET); // PE9置0，蓝灯亮
-        HAL_Delay(1000); // 延时1000ms
+//        LED_R(1); // 熄灭LED_R灯
+//        LED_B(1); // 熄灭LED_B灯
+//        LED_G(1); // 熄灭LED_G灯
+//        HAL_Delay(1000); // 延时1000ms
+//        LED_R(0); // 点亮LED_R灯
+//        HAL_Delay(1000); // 延时1000ms
+//
+//        LED_R(1); // 熄灭LED_R灯
+//        LED_B(1); // 熄灭LED_B灯
+//        LED_G(1); // 熄灭LED_G灯
+//        HAL_Delay(1000); // 延时1000ms
+//        LED_G(0); // 点亮LED_G灯
+//        HAL_Delay(1000); // 延时1000ms
+//
+//        LED_R(1); // 熄灭LED_R灯
+//        LED_B(1); // 熄灭LED_B灯
+//        LED_G(1); // 熄灭LED_G灯
+//        HAL_Delay(1000); // 延时1000ms
+//        LED_B(0); // 点亮LED_B灯
+//        HAL_Delay(1000); // 延时1000ms
+
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // PE7置1，红灯灭
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); // PE8置1，绿灯灭
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET); // PE9置1，蓝灯灭
+//        HAL_Delay(1000); // 延时1000ms
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET); // PE7置0，红灯亮
+//        HAL_Delay(1000); // 延时1000ms
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // PE7置1，红灯灭
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); // PE8置1，绿灯灭
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET); // PE9置1，蓝灯灭
+//        HAL_Delay(1000); // 延时1000ms
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET); // PE8置0，绿灯亮
+//        HAL_Delay(1000); // 延时1000ms
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); // PE7置1，红灯灭
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); // PE8置1，绿灯灭
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_SET); // PE9置1，蓝灯灭
+//        HAL_Delay(1000); // 延时1000ms
+//        HAL_GPIO_WritePin(GPIOE, GPIO_PIN_9, GPIO_PIN_RESET); // PE9置0，蓝灯亮
+//        HAL_Delay(1000); // 延时1000ms
+
+//        HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7 | GPIO_PIN_8); // 红绿灯亮灭交替
+//        HAL_Delay(1000); // 延时1000ms
+
+        key = KEY_Scan(0); // 按键扫描，不支持连续按
+        if (key == WKUP_PRES) // 如果WK_UP按下，LED闪烁
+        {
+            LED_R_TogglePin; // 红灯亮灭交替
+        }
+
 #endif
 
 #ifdef Exp2
@@ -211,12 +245,19 @@ int main(void) {
 
 #ifdef Exp6
         /**
-         * 实验六：独立看门狗
+         * 实验六：独立看门狗（IWDG）
          */
         if (KEY_Scan(0) == WKUP_PRES) // 如果WK_UP按下，喂狗
         {
             HAL_IWDG_Refresh(&hiwdg); // 喂狗
         }
+#endif
+
+#ifdef Exp7
+        /**
+         * 实验七：窗口门狗（WWDG）
+         */
+        LED_R(1); // 熄灭LED_R灯
 #endif
     }
     /* USER CODE END 3 */
@@ -263,7 +304,10 @@ void SystemClock_Config(void) {
 }
 
 /* USER CODE BEGIN 4 */
-// 串口接收中断回调函数
+/**
+ * @brief 串口接收中断回调函数
+ * @param huart
+ */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     /* Prevent unused argument(s) compilation warning */
     UNUSED(huart);

@@ -78,12 +78,13 @@ typedef __I uint32_t vuc32;
 typedef __I uint16_t vuc16;
 typedef __I uint8_t vuc8;
 
-//#define Exp1
+#define Exp1
 //#define Exp2
 //#define Exp3
 //#define Exp4
 //#define Exp5
-#define Exp6
+//#define Exp6
+//#define Exp7
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
